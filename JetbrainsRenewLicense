@@ -5,7 +5,7 @@ JETBRAINS_PATH="$HOME/.config/JetBrains"
 SCRIPT_DATE=$(date "+%F | %H:%M:%S")
 DATE=$(date +%F)
 DAY_OF_MONTH=$(date -d "$D" '+%d')
-DAY_TO_RUN=$(($DAY_OF_MONTH + 25))
+DAY_TO_RUN=$((DAY_OF_MONTH + 25))
 SCRIPT_PATH=$0
 SCRIPT_NAME=${0##*/}
 
@@ -19,7 +19,7 @@ NO_COLOR='\033[0m'
 
 
 #Notice
-echo -e "\n${COLOR_RED}Make sure to run the script with exact user that ${COLOR_BLUE}JetBrains ${COLOR_RED} acquired to execute${NO_COLOR}\n"
+echo -e "\n${COLOR_RED}Make sure to run the script with exact user that ${COLOR_BLUE}JetBrains ${COLOR_RED} acquired to execute.${NO_COLOR}\n"
 echo -e "\nScript executed on: ${COLOR_GRAY}$SCRIPT_DATE${NO_COLOR}" &>> "$HOME/JetBrainsRenewLicense.log"
 
 #Find Jetbrains Directories:
@@ -85,13 +85,13 @@ else
 fi
 
 #make crontab job
-if [ $DAY_TO_RUN -gt 30 ]; then
-  DAY_TO_RUN=$(($DAY_TO_RUN - 30))
+if [ "$DAY_TO_RUN" -gt 30 ]; then
+  DAY_TO_RUN=$((DAY_TO_RUN - 30))
 fi
 
 crontab -l > /tmp/new_crontab
-grep "$SCRIPT_NAME" /tmp/new_crontab | grep $DAY_TO_RUN &> /dev/null
-if [ $? -eq 0 ]; then
+IS_CRONTAB_EXIST=$(grep "$SCRIPT_NAME" /tmp/new_crontab | grep "$DAY_TO_RUN" &> /dev/null)
+if [ "$IS_CRONTAB_EXIST" ]; then
     echo -e "${COLOR_RED}Crontab exist." &>> "$HOME/JetBrainsRenewLicense.log"
 else
     touch /tmp/new_crontab
